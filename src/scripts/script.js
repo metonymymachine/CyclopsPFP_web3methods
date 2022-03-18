@@ -16,10 +16,10 @@ const signature_data_cyclops = require("../outputData/output_cyclops.json");
 import Web3Modal, { local } from "web3modal";
 import AWN from "awesome-notifications";
 
-// let alchemy_api =
-//"wss://eth-rinkeby.alchemyapi.io/v2/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // RINKEBY
 let alchemy_api =
-  "wss://eth-mainnet.alchemyapi.io/v2/jteXmFElZcQhvSIuZckM-3c9AA-_CrcC"; // MAINNET
+  "wss://eth-rinkeby.alchemyapi.io/v2/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // RINKEBY
+//let alchemy_api =
+// "wss://eth-mainnet.alchemyapi.io/v2/jteXmFElZcQhvSIuZckM-3c9AA-_CrcC"; // MAINNET
 
 //Vars for cyclops and allowlist quantity
 let amount_allowed, amount_allowed_cy;
@@ -48,12 +48,12 @@ export const web3ModalObj = web3Modal;
 
 // LINES TO CHANGE FOR THE SWTITCH BETWEEN MAINNET AND RINKEBY: 20, 21, 51, 56, 160
 const contractABI = abi;
-const contractAddress = "0xC4627F3B1727B20Aa30489e2DB973AE1E9BF9110"; // MAINNET
+const contractAddress = "0xa175900b57c9C11DD6730fceA6a8E18Ed1882111"; // MAINNET
 // Mainnet: 0xC4627F3B1727B20Aa30489e2DB973AE1E9BF9110 - Rinkeby: 0xa175900b57c9C11DD6730fceA6a8E18Ed1882111
 let theContract;
 //For mintpass owners
 const dependentcontractABI = abi_dependentcontract;
-const dependentcontractAddress = "0xcB5E2e44b4d9e7ED003B295dF7a5FDF072e3D858"; // MAINNET
+const dependentcontractAddress = "0x6540a57cBb52d4A3d99c103Fb130732495803561"; // MAINNET
 // Mainnet: 0xcB5E2e44b4d9e7ED003B295dF7a5FDF072e3D858 - Rinkeby: 0x6540a57cBb52d4A3d99c103Fb130732495803561
 
 let MPOWNERS_CONTRACT = createAlchemyWeb3(alchemy_api);
@@ -64,7 +64,7 @@ let theDependentContract = new MPOWNERS_CONTRACT.eth.Contract(
 
 //Web interacting functions with main contract
 
-const _price = "77000000000000000";
+const _price = "50000000000000000";
 const _allowlistPrice = "77000000000000000"; //for public sale raffle
 const _mintpassPrice = "55000000000000000";
 const loadCurrentSupply = async () => {
@@ -157,9 +157,10 @@ export const connectWallet = async () => {
       },
     };
     web3Modal = new Web3Modal({
-      network: "mainnet", // optional
+      network: "rinkeby", // optional
       cacheProvider: true,
       providerOptions, // required
+      disableInjectedProvider: false,
     });
     web3Modal.clearCachedProvider();
     provider = await web3Modal.connect();
@@ -189,8 +190,9 @@ export const connectWallet = async () => {
     let checkSummed = web3.utils.toChecksumAddress(firstAccount[0]);
     firstAccount[0] = checkSummed;
     //call mntpss for specific addr when wallet connected!
-    getMntPassAmount(firstAccount[0]); //Get mintpass user owns
+    // getMntPassAmount(firstAccount[0]); //Get mintpass user owns
     //notification texts functions
+    $(".allow_list_text").text("You can mint up to 5 cyclops per transaction");
     notifier.success("Wallet connected successfully!");
 
     $(".metamask-button").text(
@@ -461,6 +463,46 @@ export const mintpassMint = async (amount) => {
       to: contractAddress,
       value: web3.utils.toHex(_mintpassPrice * amount),
       data: theContract.methods.mintpassMint(amount).encodeABI(),
+    };
+    try {
+      const txHash = await window.ethereum.request({
+        method: "eth_sendTransaction",
+        params: [transactionParameters],
+      });
+      $(".alert").show();
+      $(".alert").text("Your mint has been started! You can check the ");
+      $(".alert").append(
+        `<a href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+      );
+      notifier.success(
+        `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
+      );
+    } catch (error) {
+      if (error.code == 4001) {
+        $(".alert").show();
+        console.log(error.message);
+        //   $(".alert").text(`The transaction was aborted`);
+        notifier.alert("The transaction was aborted!");
+      } else {
+        $(".alert").show();
+        console.log(error.message);
+        $(".alert").text("An error occrued!");
+      }
+    }
+  } else {
+    $(".alert").show();
+    notifier.warning("Please first connect your wallet");
+  }
+};
+
+export const public_mint = async (amount) => {
+  if (provider != null) {
+    //  window.contract = new web3.eth.Contract(contractABI, contractAddress);
+    const transactionParameters = {
+      from: firstAccount[0],
+      to: contractAddress,
+      value: web3.utils.toHex(_price * amount),
+      data: theContract.methods.publicMint(amount).encodeABI(),
     };
     try {
       const txHash = await window.ethereum.request({

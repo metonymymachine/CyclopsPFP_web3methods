@@ -14,6 +14,7 @@ import {
   allowListCounter,
   mintpassMint,
   provider,
+  public_mint,
 } from "./script";
 
 //connect to the wallet
@@ -38,6 +39,10 @@ global.mint_pass_mint = (amount) => {
 
 global.provider_ = () => {
   return provider;
+};
+
+global.publicmint = (amount) => {
+  public_mint(amount);
 };
 
 //bundle price minting
