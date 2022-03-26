@@ -483,10 +483,33 @@ export const mintpassMint = async (amount) => {
         console.log(error.message);
         //   $(".alert").text(`The transaction was aborted`);
         notifier.alert("The transaction was aborted!");
-      } else {
+      } 
+      else if (error.code == 4100) {
         $(".alert").show();
         console.log(error.message);
-        $(".alert").text("An error occrued!");
+        notifier.warning("The requested method and/or account has not been authorized by the user.");
+      }
+      else if (error.code == 4200) {
+        $(".alert").show();
+        console.log(error.message);
+        notifier.warning("The wallet provider does not support the requested method.");
+      }
+      else if (error.code == 4900) {
+        $(".alert").show();
+        console.log(error.message);
+        notifier.warning("The wallet provider is disconnected from all chains.");
+      }
+
+      else if (error.code == 4901) {
+        $(".alert").show();
+        console.log(error.message);
+        notifier.warning("The Provider is not connected to the requested chain.");
+      }
+
+      else {
+        $(".alert").show();
+        console.log(error.message);
+        $(".alert").text("An unspecified error occured.");
       }
     }
   } else {
@@ -628,7 +651,7 @@ export const addWalletListener = () => {
   }
 };
 
-//check netowrk change if occurs
+//check netowork change if occurs
 if (window.ethereum) {
   //check which netowrk user is connected to
   // detect Network account change
