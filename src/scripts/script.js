@@ -85,7 +85,7 @@ setInterval(() => {
       })
       .catch((err) => {
         console.log(err);
-        $(".supply").text("Sorry error occured!");
+        $(".supply").text("An unspecified error with your wallet provider has occured.");
       });
   }
 }, 5000);
@@ -509,7 +509,7 @@ export const mintpassMint = async (amount) => {
       else {
         $(".alert").show();
         console.log(error.message);
-        $(".alert").text("An unspecified error occured.");
+        $(".alert").text("An unspecified error has occured.");
       }
     }
   } else {
@@ -573,7 +573,7 @@ export const public_mint = async (amount) => {
       else {
         $(".alert").show();
         console.log(error.message);
-        $(".alert").text("An unspecified error occured!");
+        $(".alert").text("We are sorry, but an unspecified error with your wallet provider has occured.");
       }
     }
   } else {
