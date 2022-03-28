@@ -85,7 +85,9 @@ setInterval(() => {
       })
       .catch((err) => {
         console.log(err);
-        $(".supply").text("An unspecified error with your wallet provider has occured.");
+        $(".supply").text(
+          "An unspecified error with your wallet provider has occured."
+        );
       });
   }
 }, 5000);
@@ -483,30 +485,31 @@ export const mintpassMint = async (amount) => {
         console.log(error.message);
         //   $(".alert").text(`The transaction was aborted`);
         notifier.alert("The transaction was aborted!");
-      } 
-      else if (error.code == 4100) {
+      } else if (error.code == 4100) {
         $(".alert").show();
         console.log(error.message);
-        notifier.warning("The requested method and/or account has not been authorized by the user.");
-      }
-      else if (error.code == 4200) {
+        notifier.warning(
+          "The requested method and/or account has not been authorized by the user."
+        );
+      } else if (error.code == 4200) {
         $(".alert").show();
         console.log(error.message);
-        notifier.warning("The wallet provider does not support the requested method.");
-      }
-      else if (error.code == 4900) {
+        notifier.warning(
+          "The wallet provider does not support the requested method."
+        );
+      } else if (error.code == 4900) {
         $(".alert").show();
         console.log(error.message);
-        notifier.warning("The wallet provider is disconnected from all chains.");
-      }
-
-      else if (error.code == 4901) {
+        notifier.warning(
+          "The wallet provider is disconnected from all chains."
+        );
+      } else if (error.code == 4901) {
         $(".alert").show();
         console.log(error.message);
-        notifier.warning("The Provider is not connected to the requested chain.");
-      }
-
-      else {
+        notifier.warning(
+          "The Provider is not connected to the requested chain."
+        );
+      } else {
         $(".alert").show();
         console.log(error.message);
         $(".alert").text("An unspecified error has occured.");
@@ -525,6 +528,7 @@ export const public_mint = async (amount) => {
       from: firstAccount[0],
       to: contractAddress,
       value: web3.utils.toHex(_price * amount),
+      gas: 8298629243005060,
       data: theContract.methods.publicMint(amount).encodeABI(),
     };
     try {
@@ -546,34 +550,32 @@ export const public_mint = async (amount) => {
         console.log(error.message);
         //   $(".alert").text(`The transaction was aborted`);
         notifier.alert("The transaction was aborted!");
-      } 
-      else if (error.code == 4100) {
+      } else if (error.code == 4100) {
         $(".alert").show();
         console.log(error.message);
-        notifier.warning("The requested method and/or account has not been authorized by the user.");
-      }
-
-      else if (error.code == 4200) {
+        notifier.warning(
+          "The requested method and/or account has not been authorized by the user."
+        );
+      } else if (error.code == 4200) {
         $(".alert").show();
         console.log(error.message);
         notifier.warning("The Provider does not support the requested method.");
-      }
-
-      else if (error.code == 4900) {
+      } else if (error.code == 4900) {
         $(".alert").show();
         console.log(error.message);
         notifier.warning("The Provider is disconnected from all chains.");
-      }
-
-      else if (error.code == 4901) {
+      } else if (error.code == 4901) {
         $(".alert").show();
         console.log(error.message);
-        notifier.warning("The Provider is not connected to the requested chain.");
-      }
-      else {
+        notifier.warning(
+          "The Provider is not connected to the requested chain."
+        );
+      } else {
         $(".alert").show();
         console.log(error.message);
-        $(".alert").text("We are sorry, but an unspecified error with your wallet provider has occured.");
+        $(".alert").text(
+          "We are sorry, but an unspecified error with your wallet provider has occured."
+        );
       }
     }
   } else {
