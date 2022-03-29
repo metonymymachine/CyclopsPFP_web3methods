@@ -147,8 +147,8 @@ export const connectWallet = async () => {
       walletconnect: {
         package: WalletConnectProvider,
         options: {
-          // Mikko's test key - don't copy as your mileage may vary
           infuraId: "5b3b303e5c124bdfb7029389b1a0d599",
+          network: "rinkeby",
           qrcodeModalOptions: {
             mobileLinks: [
               "rainbow",
@@ -172,7 +172,6 @@ export const connectWallet = async () => {
       network: "rinkeby", // optional
       cacheProvider: true,
       providerOptions, // required
-      disableInjectedProvider: false,
     });
     web3Modal.clearCachedProvider();
     provider = await web3Modal.connect();
@@ -385,7 +384,7 @@ export const allowlist_mint = async (amount) => {
         $(".alert").show();
         $(".alert").text("Your mint has been started! You can check the ");
         $(".alert").append(
-          `<a href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+          `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
         );
         notifier.success(
           `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
@@ -439,7 +438,7 @@ export const cyclops_mint = async (amount) => {
         $(".alert").show();
         $(".alert").text("Your mint has been started! You can check the ");
         $(".alert").append(
-          `<a href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+          `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
         );
         notifier.success(
           `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
@@ -484,7 +483,7 @@ export const mintpassMint = async (amount) => {
       $(".alert").show();
       $(".alert").text("Your mint has been started! You can check the ");
       $(".alert").append(
-        `<a href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+        `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
       );
       notifier.success(
         `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
@@ -538,7 +537,6 @@ export const public_mint = async (amount) => {
       from: firstAccount[0],
       to: contractAddress,
       value: web3.utils.toHex(_price * amount),
-      gas: 8298629243005060,
       data: theContract.methods.publicMint(amount).encodeABI(),
     };
     try {
@@ -549,7 +547,7 @@ export const public_mint = async (amount) => {
       $(".alert").show();
       $(".alert").text("Your mint has been started! You can check the ");
       $(".alert").append(
-        `<a href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+        `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
       );
       notifier.success(
         `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
