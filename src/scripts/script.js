@@ -9,6 +9,8 @@ var WAValidator = require("wallet-validator");
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import WalletLink from "walletlink";
+
 const { createAlchemyWeb3 } = require("@alch/alchemy-web3");
 const signature_data_allowlist = require("../outputData/output_allowlist.json");
 const signature_data_cyclops = require("../outputData/output_cyclops.json");
@@ -17,9 +19,9 @@ import Web3Modal, { local } from "web3modal";
 import AWN from "awesome-notifications";
 
 let alchemy_api =
-  "wss://eth-rinkeby.alchemyapi.io/v2/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // RINKEBY
+  "wss://eth-rinkeby.ws.alchemyapi.io/ws/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // RINKEBY
 //let alchemy_api =
-// "wss://eth-mainnet.alchemyapi.io/v2/jteXmFElZcQhvSIuZckM-3c9AA-_CrcC"; // MAINNET
+// "wss://eth-mainnet.ws.alchemyapi.io/ws/jteXmFElZcQhvSIuZckM-3c9AA-_CrcC"; // MAINNET
 
 //Vars for cyclops and allowlist quantity
 let amount_allowed, amount_allowed_cy;
@@ -145,20 +147,20 @@ export const connectWallet = async () => {
   try {
     let providerOptions = {
       walletconnect: {
-        package: WalletConnectProvider,
+        package: WalletConnectProvider, // required
         options: {
-          infuraId: "5b3b303e5c124bdfb7029389b1a0d599",
-          network: "rinkeby",
-          qrcodeModalOptions: {
-            mobileLinks: [
-              "rainbow",
-              "metamask",
-              "argent",
-              "trust",
-              "imtoken",
-              "pillar",
-            ],
-          },
+          infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // required
+        },
+      },
+      walletlink: {
+        package: WalletLink, // Required
+        options: {
+          appName: "Cyclops PFP", // Required
+          infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // Required unless you provide a JSON RPC url; see `rpc` below
+          //rpc: "", // Optional if `infuraId` is provided; otherwise it's required
+          chainId: 4, // Optional. It defaults to 1 if not provided
+          appLogoUrl: null, // Optional. Application logo image URL. favicon is used if unspecified
+          darkMode: false, // Optional. Use dark theme, defaults to false
         },
       },
       metamask: {
@@ -175,13 +177,6 @@ export const connectWallet = async () => {
     });
     web3Modal.clearCachedProvider();
     provider = await web3Modal.connect();
-    // web3 = new Web3(provider);
-
-    //check for chainid
-
-    // if (Number(chainid) != 1) {
-
-    // }
 
     localStorage.setItem("walletConnected", "1");
 
@@ -196,10 +191,11 @@ export const connectWallet = async () => {
 
     theContract = new web3.eth.Contract(contractABI, contractAddress);
     firstAccount = await web3.eth.getAccounts().then((data) => data);
-    console.log(firstAccount);
+    
     //Eevry address has to be checksumed on both scripts before creating signature and frontend
     let checkSummed = web3.utils.toChecksumAddress(firstAccount[0]);
     firstAccount[0] = checkSummed;
+    console.log(checkSummed);
     //call mntpss for specific addr when wallet connected!
     // getMntPassAmount(firstAccount[0]); //Get mintpass user owns
     //notification texts functions
