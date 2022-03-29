@@ -149,13 +149,23 @@ export const connectWallet = async () => {
         options: {
           // Mikko's test key - don't copy as your mileage may vary
           infuraId: "5b3b303e5c124bdfb7029389b1a0d599",
+          qrcodeModalOptions: {
+            mobileLinks: [
+              "rainbow",
+              "metamask",
+              "argent",
+              "trust",
+              "imtoken",
+              "pillar",
+            ],
+          },
         },
-        metamask: {
-          id: "injected",
-          name: "MetaMask",
-          type: "injected",
-          check: "isMetaMask",
-        },
+      },
+      metamask: {
+        id: "injected",
+        name: "MetaMask",
+        type: "injected",
+        check: "isMetaMask",
       },
     };
     web3Modal = new Web3Modal({
