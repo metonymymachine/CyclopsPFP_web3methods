@@ -146,23 +146,23 @@ const loadBalanceContract = async () => {
 export const connectWallet = async () => {
   try {
     let providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider, // required
-        options: {
-          infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // required
-        },
-      },
-      walletlink: {
-        package: WalletLink, // Required
-        options: {
-          appName: "Cyclops PFP", // Required
-          infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // Required unless you provide a JSON RPC url; see `rpc` below
-          //rpc: "", // Optional if `infuraId` is provided; otherwise it's required
-          chainId: 4, // Optional. It defaults to 1 if not provided
-          appLogoUrl: null, // Optional. Application logo image URL. favicon is used if unspecified
-          darkMode: false, // Optional. Use dark theme, defaults to false
-        },
-      },
+      // walletconnect: {
+      //   package: WalletConnectProvider, // required
+      //   options: {
+      //     infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // required
+      //   },
+      // },
+      // walletlink: {
+      //   package: WalletLink, // Required
+      //   options: {
+      //     appName: "Cyclops PFP", // Required
+      //     infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // Required unless you provide a JSON RPC url; see `rpc` below
+      //     //rpc: "", // Optional if `infuraId` is provided; otherwise it's required
+      //     chainId: 4, // Optional. It defaults to 1 if not provided
+      //     appLogoUrl: null, // Optional. Application logo image URL. favicon is used if unspecified
+      //     darkMode: false, // Optional. Use dark theme, defaults to false
+      //   },
+      // },
       metamask: {
         id: "injected",
         name: "MetaMask",
@@ -191,7 +191,7 @@ export const connectWallet = async () => {
 
     theContract = new web3.eth.Contract(contractABI, contractAddress);
     firstAccount = await web3.eth.getAccounts().then((data) => data);
-    
+
     //Eevry address has to be checksumed on both scripts before creating signature and frontend
     let checkSummed = web3.utils.toChecksumAddress(firstAccount[0]);
     firstAccount[0] = checkSummed;
@@ -528,7 +528,7 @@ export const mintpassMint = async (amount) => {
 
 export const public_mint = async (amount) => {
   if (provider != null) {
-    //  window.contract = new web3.eth.Contract(contractABI, contractAddress);
+    window.contract = new web3.eth.Contract(contractABI, contractAddress);
     const transactionParameters = {
       from: firstAccount[0],
       to: contractAddress,
