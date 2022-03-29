@@ -21,7 +21,7 @@ import AWN from "awesome-notifications";
 //let alchemy_api =
 //"wss://eth-rinkeby.ws.alchemyapi.io/ws/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // RINKEBY
 let alchemy_api =
-  "wss://eth-rinkeby.ws.alchemyapi.io/ws/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // MAINNET
+  "wss://eth-mainnet.ws.alchemyapi.io/ws/t82OF0MzIcUKcNf_AxDSkVDAouxvS6W3"; // MAINNET
 
 //Vars for cyclops and allowlist quantity
 let amount_allowed, amount_allowed_cy;
