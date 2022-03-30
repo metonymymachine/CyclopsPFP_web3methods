@@ -146,19 +146,19 @@ const loadBalanceContract = async () => {
 export const connectWallet = async () => {
   try {
     let providerOptions = {
-      // walletconnect: {
-      //   package: WalletConnectProvider, // required
-      //   options: {
-      //     infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // required
-      //   },
-      // },
+      walletconnect: {
+        package: WalletConnectProvider, // required
+        options: {
+          infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // required
+        },
+      },
       // walletlink: {
       //   package: WalletLink, // Required
       //   options: {
       //     appName: "Cyclops PFP", // Required
       //     infuraId: "5b3b303e5c124bdfb7029389b1a0d599", // Required unless you provide a JSON RPC url; see `rpc` below
       //     //rpc: "", // Optional if `infuraId` is provided; otherwise it's required
-      //     chainId: 4, // Optional. It defaults to 1 if not provided
+      //     chainId: 1, // Optional. It defaults to 1 if not provided
       //     appLogoUrl: null, // Optional. Application logo image URL. favicon is used if unspecified
       //     darkMode: false, // Optional. Use dark theme, defaults to false
       //   },
@@ -172,12 +172,13 @@ export const connectWallet = async () => {
     };
     web3Modal = new Web3Modal({
       network: "mainnet", // optional
-      cacheProvider: true,
+      cacheProvider: false,
       providerOptions, // required
     });
     web3Modal.clearCachedProvider();
     provider = await web3Modal.connect();
 
+    provider.enable();
     localStorage.setItem("walletConnected", "1");
 
     web3 = createAlchemyWeb3(alchemy_api, { writeProvider: provider });
@@ -427,18 +428,21 @@ export const cyclops_mint = async (amount) => {
           .encodeABI(),
       };
       try {
-        const txHash = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [transactionParameters],
+        web3.eth.sendTransaction(transactionParameters, function (err, txHash) {
+          if (err) {
+            console.log(err);
+          } else {
+            $(".alert").show();
+            $(".alert").text("Your mint has been started! You can check the ");
+            $(".alert").append(
+              `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+            );
+            notifier.success(
+              `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
+            );
+            console.log(txHash);
+          }
         });
-        $(".alert").show();
-        $(".alert").text("Your mint has been started! You can check the ");
-        $(".alert").append(
-          `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
-        );
-        notifier.success(
-          `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
-        );
       } catch (error) {
         if (error.code == 4001) {
           $(".alert").show();
@@ -472,18 +476,21 @@ export const mintpassMint = async (amount) => {
       data: theContract.methods.mintpassMint(amount).encodeABI(),
     };
     try {
-      const txHash = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [transactionParameters],
+      web3.eth.sendTransaction(transactionParameters, function (err, txHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          $(".alert").show();
+          $(".alert").text("Your mint has been started! You can check the ");
+          $(".alert").append(
+            `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+          );
+          notifier.success(
+            `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
+          );
+          console.log(txHash);
+        }
       });
-      $(".alert").show();
-      $(".alert").text("Your mint has been started! You can check the ");
-      $(".alert").append(
-        `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
-      );
-      notifier.success(
-        `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
-      );
     } catch (error) {
       if (error.code == 4001) {
         $(".alert").show();
@@ -536,18 +543,21 @@ export const public_mint = async (amount) => {
       data: theContract.methods.publicMint(amount).encodeABI(),
     };
     try {
-      const txHash = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [transactionParameters],
+      web3.eth.sendTransaction(transactionParameters, function (err, txHash) {
+        if (err) {
+          console.log(err);
+        } else {
+          $(".alert").show();
+          $(".alert").text("Your mint has been started! You can check the ");
+          $(".alert").append(
+            `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
+          );
+          notifier.success(
+            `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
+          );
+          console.log(txHash);
+        }
       });
-      $(".alert").show();
-      $(".alert").text("Your mint has been started! You can check the ");
-      $(".alert").append(
-        `<a class="tx_link" href='https://etherscan.io/tx/${txHash}' target='_blank'>progress of your transaction.</a>`
-      );
-      notifier.success(
-        `The transaction is initiated. You can view it here: <a target='_blank' href='https://etherscan.io/tx/${txHash}'> Etherscan</a>`
-      );
     } catch (error) {
       if (error.code == 4001) {
         $(".alert").show();
