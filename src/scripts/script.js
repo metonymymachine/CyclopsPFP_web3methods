@@ -176,15 +176,16 @@ export const connectWallet = async () => {
       providerOptions, // required
     });
     web3Modal.clearCachedProvider();
+    localStorage.clear();
     provider = await web3Modal.connect();
 
     provider.enable();
     localStorage.setItem("walletConnected", "1");
 
-    web3 = createAlchemyWeb3(alchemy_api, { writeProvider: provider });
-    //chain name detection
-    console.log(provider.networkVersion);
-    if (Number(provider.networkVersion) != Number(1)) {
+    web3 = new Web3(provider) //createAlchemyWeb3(alchemy_api, { writeProvider: provider });
+    //chain name detection function
+    const chainId = await web3.eth.getChainId();
+    if (Number(chainId) != Number(1)) {
       new AWN().modal(
         "<b >You are connected to the wrong network.<br> Please switch to ETH Mainnet</b>"
       );
